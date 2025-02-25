@@ -22,6 +22,13 @@ Polinom::~Polinom()
 {
 }
 
+Polinom& Polinom::operator=(const Polinom& p)
+{
+	if (*this == p) return *this;
+	List<Monom>::operator=(p);
+	return *this;
+}
+
 void Polinom::operator+=(Monom m)
 {
 	if (pFirst == nullptr)
@@ -53,6 +60,42 @@ void Polinom::operator+=(Monom m)
 			}
 		}
 	}
+}
+
+Polinom Polinom::operator+(Monom m)
+{
+	Polinom res(*this);
+
+	if (pFirst == nullptr)
+		res.InsLast(m);
+	else
+	{
+		if (m > pFirst->val)
+			res.InsFirst(m);
+		else if (m < pLast->val)
+			res.InsLast(m);
+		else
+		{
+			for (Reset(); !IsEnd(); GoNext())
+			{
+				if (m > pCurr->val)
+				{
+					res.InsCurr(m);
+					return res;
+				}
+				if (m == pCurr->val)
+				{
+					double c = pCurr->val.coeff + m.coeff;
+					if (c != 0.0)
+						res.pCurr->val.coeff = c;
+					else
+						res.DelCurr();
+					return res;
+				}
+			}
+		}
+	}
+	return res;
 }
 
 

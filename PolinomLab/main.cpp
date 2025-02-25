@@ -112,5 +112,9 @@ int main()
 
     cout << d;
 
+    Polinom d2;
     
+    d2 = d + f;
+
+    cout << d2 << endl;
 }

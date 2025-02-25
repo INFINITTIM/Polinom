@@ -62,7 +62,6 @@ TEST(Monom, correct_NE_monom) {
     EXPECT_NE(m1, m2);
 }
 
-
 /*TEST(TQueue, can_create_queue_with_positive_size) {
     ASSERT_NO_THROW(Monom m());
 }

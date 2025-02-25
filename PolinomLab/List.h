@@ -101,6 +101,29 @@ List<T>::~List()
 }
 
 template <class T>
+List<T>& List<T>::operator=(const List<T>& p)
+{
+	if (this == &p)
+		return *this;
+	else
+	{
+		
+	}
+}
+
+template <class T>
+bool List<T>::operator==(const List<T>& p) const
+{
+
+}
+
+template <class T>
+bool List<T>::operator!=(const List<T>& p) const
+{
+
+}
+
+template <class T>
 void List<T>::InsFirst(T element)
 {
 	Node<T>* newNode = new Node<T>;

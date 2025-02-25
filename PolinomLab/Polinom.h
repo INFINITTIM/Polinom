@@ -17,6 +17,8 @@ public:
 	Polinom(Monom* m, int size);
 	~Polinom();
 
+	Polinom& operator=(const Polinom& p);
+
 	Polinom operator+(double t);
 	void operator+=(double t);
 	void AddConst(double t);
@@ -41,10 +43,6 @@ public:
 	Polinom operator*(Polinom p);
 	void operator*=(Polinom p);
 	void MultPolinom(Polinom p);
-
-	//void DivConst(double t);
-	//void DivMonom(Monom m);
-	//void DivPolinom(Polinom p);
 
 	friend ostream& operator<<(ostream& out,Polinom& p)
 	{
