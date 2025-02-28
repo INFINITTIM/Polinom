@@ -15,13 +15,9 @@ protected:
 public:
 
 	typedef ListIterator<T> iterator;
-	typedef ListIterator<const T> const_iterator;
 
 	iterator begin() { return iterator(pFirst); }
 	iterator end() { return iterator(pLast->pNext); }
-
-	const_iterator begin() const { return const_iterator(pFirst); }
-	const_iterator end() const { return const_iterator(pLast->pNext); }
 
 	List();
 	List(const List<T>& p);
@@ -46,6 +42,8 @@ public:
 	T getCurr();
 
 	void Clear();
+	bool IsEmpty();
+	int Size();
 };
 
 template <class T>
@@ -190,9 +188,13 @@ void List<T>::InsFirst(T element)
 	newNode->val = element;
 	newNode->pNext = pFirst;
 	if (pFirst == nullptr)
+	{
 		pLast = newNode;
-	pFirst = newNode;
-	Reset();
+		pFirst = newNode;
+		Reset();
+	}
+	else
+		pFirst = newNode;
 	size++;
 }
 
@@ -211,10 +213,7 @@ void List<T>::InsLast(T element)
 	else
 	{
 		pLast->pNext = newNode;
-		pPrev = pLast;
 		pLast = newNode;
-		pCurr = pLast;
-
 	}
 	size++;
 }
@@ -263,6 +262,8 @@ void List<T>::DelLast()
 		tmp = tmp->pNext;
 	}
 	Node<T>* last_node = tmp->pNext;
+	if (pCurr == tmp->pNext)
+		pCurr = nullptr;
 	delete last_node;
 	tmp->pNext = nullptr;
 	pLast = tmp;
@@ -272,7 +273,10 @@ void List<T>::DelLast()
 template <class T>
 void List<T>::DelCurr()
 {
-	if (pCurr == pFirst)
+	if (pCurr == nullptr) {
+		return;
+	}
+	else if (pCurr == pFirst)
 	{
 		DelFirst();
 	}
@@ -332,4 +336,23 @@ void List<T>::Clear()
 		pFirst = pFirst->pNext;
 		delete tmp;
 	}
+}
+
+template<class T>
+bool List<T>::IsEmpty()
+{
+	if (pFirst == nullptr)
+		return true;
+	return false;
+}
+
+template<class T>
+int List<T>::Size()
+{
+	int size = 0;
+	while (pFirst != nullptr) {
+		pFirst = pFirst->pNext;
+		size++;
+	}
+	return size;
 }

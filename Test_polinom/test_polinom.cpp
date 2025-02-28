@@ -8,7 +8,7 @@
 #include "gtest.h"
 
 TEST(Monom, can_create_empty_monom) {
-    ASSERT_NO_THROW(Monom m());
+    ASSERT_NO_THROW(Monom m);
 }
 
 TEST(Monom, can_create_custom_monom) {
@@ -65,7 +65,7 @@ TEST(Monom, correct_NE_monom) {
 
 TEST(List, can_create_list)
 {
-    ASSERT_NO_THROW(List<int> m());
+    ASSERT_NO_THROW(List<int> m);
 }
 
 
@@ -75,6 +75,171 @@ TEST(List, can_copy_list)
     m1.InsFirst(2);
     ASSERT_NO_THROW(List<int> m(m1));
 }
+
+
+TEST(List, correct_copy_list)
+{
+    List<int> m1;
+    m1.InsFirst(2);
+    List<int> m(m1);
+    EXPECT_EQ(m, m1);
+}
+
+
+TEST(List, compare_lists)
+{
+    List<int> m1;
+    m1.InsFirst(2);
+    m1.InsFirst(4);
+    List<int> m;
+    m.InsFirst(2);
+    m.InsFirst(4);
+    EXPECT_TRUE(m == m1);
+}
+
+TEST(List, no_compare_lists)
+{
+    List<int> m1;
+    m1.InsFirst(2);
+    m1.InsFirst(4);
+    List<int> m;
+    m.InsFirst(4);
+    m.InsFirst(2);
+    EXPECT_NE(m,m1);
+}
+
+TEST(List, correct_inslast)
+{
+    List<int> m1;
+    m1.InsLast(1);
+    EXPECT_EQ(m1.getCurr(), 1);
+}
+
+TEST(List, correct_insfirst)
+{
+    List<int> m1;
+    m1.InsFirst(1);
+    m1.InsFirst(3);
+    m1.InsLast(2);
+    m1.Reset();
+    EXPECT_EQ(m1.getCurr(), 3);
+}
+
+TEST(List, correct_inscurr)
+{
+    List<int> m1;
+    m1.InsFirst(2);
+    m1.InsCurr(3);
+    EXPECT_EQ(m1.getCurr(), 2);
+}
+
+TEST(List, correct_dellast)
+{
+    List<int> m1;
+    m1.InsFirst(2);
+    m1.InsCurr(3);
+    m1.DelLast();
+    m1.Reset();
+    EXPECT_EQ(m1.getCurr(), 3);
+}
+
+TEST(List, correct_delfirst)
+{
+    List<int> m1;
+    m1.InsFirst(2);
+    m1.InsCurr(3);
+    m1.DelFirst();
+    EXPECT_EQ(m1.getCurr(), 2);
+}
+
+TEST(List, correct_delcurr)
+{
+    List<int> m1;
+    m1.InsFirst(2);
+    m1.InsCurr(3);
+    m1.InsLast(4);
+    m1.InsLast(5);
+    m1.GoNext();
+    m1.DelCurr();
+    m1.Reset();
+    m1.GoNext();
+    m1.GoNext();
+    EXPECT_EQ(m1.getCurr(), 5);
+}
+
+TEST(List, correct_reset)
+{
+    List<int> m1;
+    m1.InsFirst(2);
+    m1.InsCurr(3);
+    m1.Reset();
+    EXPECT_EQ(m1.getCurr(), 3);
+
+}
+
+TEST(List, correct_getCurr)
+{
+    List<int> m1;
+    m1.InsFirst(2);
+    m1.InsCurr(3);
+    m1.InsLast(5);
+    m1.GoNext();
+    EXPECT_EQ(m1.getCurr(), 5);
+}
+
+TEST(List, correct_IsEnd)
+{
+    List<int> m1;
+    m1.InsFirst(2);
+    m1.InsCurr(3);
+    m1.InsLast(5);
+    m1.GoNext();
+    m1.DelLast();
+    ASSERT_TRUE(m1.IsEnd());
+}
+
+TEST(List, correct_GoNext)
+{
+    List<int> m1;
+    m1.InsFirst(2);
+    m1.InsCurr(3);
+    m1.InsLast(5);
+    m1.GoNext();
+    EXPECT_EQ(m1.getCurr(), 5);
+}
+
+TEST(List, correct_clear)
+{
+    List<int> m1;
+    m1.InsFirst(2);
+    m1.InsCurr(3);
+    m1.InsLast(5);
+    m1.Clear();
+    ASSERT_TRUE(m1.IsEmpty());
+}
+
+TEST(List, correct_empty)
+{
+    List<int> m1;
+    m1.InsFirst(2);
+    m1.InsCurr(3);
+    m1.InsLast(5);
+    m1.Clear();
+    ASSERT_TRUE(m1.Size() == 0);
+}
+
+TEST(List, correct_size)
+{
+    List<int> m1;
+    m1.InsFirst(2);
+    m1.InsCurr(3);
+    m1.InsLast(5);
+    m1.DelCurr();
+    ASSERT_TRUE(m1.Size() == 2);
+}
+
+
+
 
 /*TEST(TQueue, can_create_queue_with_positive_size) {
     ASSERT_NO_THROW(Monom m());
