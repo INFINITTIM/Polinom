@@ -20,28 +20,39 @@ public:
 	Polinom& operator=(const Polinom& p);
 
 	Polinom operator+(double t);
-	void operator+=(double t);
-	void AddConst(double t);
-
-	Polinom operator+(Monom);
-	void operator+=(Monom m);
-	void AddMonom(Monom m);
-
+	Polinom operator+(Monom m);
 	Polinom operator+(Polinom p);
-	void operator+=(Polinom p);
-	Polinom AddPolinom2(Polinom p);
-	void AddPolinom(Polinom p);
+
+	Polinom operator-(double t);
+	Polinom operator-(Monom m);
+	Polinom operator-(Polinom p);
 
 	Polinom operator*(double t);
-	void operator*=(double t);
-	void MultConst(double t);
-
 	Polinom operator*(Monom m);
-	void operator*=(Monom m);
-	void MultMonom(Monom m);
-
 	Polinom operator*(Polinom p);
+
+	void operator+=(double t);
+	void operator+=(Monom m);
+	void operator+=(Polinom p);
+
+	void operator-=(double t);
+	void operator-=(Monom m);
+	void operator-=(Polinom p);
+
+	void operator*=(double t);
+	void operator*=(Monom m);
 	void operator*=(Polinom p);
+
+	void AddConst(double t);
+	void AddMonom(Monom m);
+	void AddPolinom(Polinom p);
+
+	void SubConst(double t);
+	void SubMonom(Monom m);
+	void SubPolinom(Polinom p);
+
+	void MultConst(double t);
+	void MultMonom(Monom m);
 	void MultPolinom(Polinom p);
 
 	friend ostream& operator<<(ostream& out,Polinom& p)

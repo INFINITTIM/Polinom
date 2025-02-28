@@ -1,6 +1,6 @@
-#include "Polinom.h"
-
 #pragma once
+
+#include "Polinom.h"
 
 Polinom::Polinom()
 {
@@ -24,9 +24,33 @@ Polinom::~Polinom()
 
 Polinom& Polinom::operator=(const Polinom& p)
 {
-	if (*this == p) return *this;
-	List<Monom>::operator=(p);
+	if (*this == p) 
+		return *this;
+	else
+	{
+		List<Monom>::operator=(p);
+		return *this;
+	}
+}
+
+
+void Polinom::operator+=(double t)
+{
+	Monom a(t, 0, 0, 0);
+	AddMonom(a);
+}
+
+Polinom Polinom::operator+(double t)
+{
+	Monom a(t, 0, 0, 0);
+	AddMonom(a);
 	return *this;
+}
+
+void Polinom::AddConst(double t)
+{
+	Monom a(t, 0, 0, 0);
+	AddMonom(a);
 }
 
 void Polinom::operator+=(Monom m)
@@ -70,22 +94,22 @@ Polinom Polinom::operator+(Monom m)
 		res.InsLast(m);
 	else
 	{
-		if (m > pFirst->val)
+		if (m > res.pFirst->val)
 			res.InsFirst(m);
-		else if (m < pLast->val)
+		else if (m < res.pLast->val)
 			res.InsLast(m);
 		else
 		{
-			for (Reset(); !IsEnd(); GoNext())
+			for (res.Reset(); !res.IsEnd(); res.GoNext())
 			{
-				if (m > pCurr->val)
+				if (m > res.pCurr->val)
 				{
 					res.InsCurr(m);
 					return res;
 				}
-				if (m == pCurr->val)
+				if (m == res.pCurr->val)
 				{
-					double c = pCurr->val.coeff + m.coeff;
+					double c = res.pCurr->val.coeff + m.coeff;
 					if (c != 0.0)
 						res.pCurr->val.coeff = c;
 					else
@@ -97,7 +121,6 @@ Polinom Polinom::operator+(Monom m)
 	}
 	return res;
 }
-
 
 void Polinom::AddMonom(Monom m)
 {
@@ -132,6 +155,16 @@ void Polinom::AddMonom(Monom m)
 	}
 }
 
+void Polinom::operator+=(Polinom p)
+{
+	Polinom::iterator i(p.begin());
+
+	for (; i != p.end(); ++i)
+	{
+		AddMonom(*i);
+	}
+}
+
 //написать более быстрый алгоритм сложения похожий на слияние двух упорядоченных массивов 
 // в сортировке слиянием двигая pCurr у обоих 
 // 1) p.pCurr->val = res.pCurr->val;
@@ -149,6 +182,17 @@ void Polinom::AddMonom(Monom m)
 //	
 //}
 
+Polinom Polinom::operator+(Polinom p)
+{
+	Polinom::iterator i(p.begin());
+
+	for (; i != p.end(); ++i)
+	{
+		AddMonom(*i);
+	}
+	return *this;
+}
+
 void Polinom::AddPolinom(Polinom p)
 {
 	Polinom::iterator i(p.begin());
@@ -159,30 +203,52 @@ void Polinom::AddPolinom(Polinom p)
 	}
 }
 
-void Polinom::AddConst(double t)
-{
-	Monom a(t, 0, 0, 0);
-	AddMonom(a);
-}
-
 void Polinom::operator*=(double t)
 {
 	if (t == 0.0)
 	{
-		//Clear();
+		Clear();
 	}
-	Polinom::iterator i(this->begin());
-	for (; i != this->end(); ++i)
+	else
 	{
-		(*i).coeff *= t;
+		Polinom::iterator i(this->begin());
+		for (; i != this->end(); ++i)
+		{
+			(*i).coeff *= t;
+		}
 	}
 }
+
+Polinom Polinom::operator*(double t)
+{
+	if (t == 0.0)
+	{
+		Clear();
+	}
+	else
+	{
+		Polinom::iterator i(this->begin());
+		for (; i != this->end(); ++i)
+		{
+			(*i).coeff *= t;
+		}
+	}
+	return *this;
+}
+
 void Polinom::MultConst(double t)
 {
-	Polinom::iterator i(this->begin());
-	for (; i != this->end(); ++i)
+	if (t == 0.0)
 	{
-		(*i).coeff *= t;
+		Clear();
+	}
+	else
+	{
+		Polinom::iterator i(this->begin());
+		for (; i != this->end(); ++i)
+		{
+			(*i).coeff *= t;
+		}
 	}
 }
 
@@ -197,6 +263,20 @@ void Polinom::operator*=(Monom m)
 		(*i).z += m.z;
 	}
 }
+
+Polinom Polinom::operator*(Monom m)
+{
+	Polinom::iterator i(this->begin());
+	for (; i != this->end(); ++i)
+	{
+		(*i).coeff *= m.coeff;
+		(*i).x += m.x;
+		(*i).y += m.y;
+		(*i).z += m.z;
+	}
+	return *this;
+}
+
 void Polinom::MultMonom(Monom m)
 {
 	Polinom::iterator i(this->begin());
@@ -208,6 +288,7 @@ void Polinom::MultMonom(Monom m)
 		(*i).z += m.z;
 	}
 }
+
 void Polinom::MultPolinom(Polinom p)
 {
 	Polinom d;
@@ -240,15 +321,105 @@ void Polinom::MultPolinom(Polinom p)
 	}
 }
 
-Polinom Polinom::operator+(Polinom p)
+Polinom Polinom::operator*(Polinom p)
 {
-	Polinom res(*this);
-	for (p.Reset(); !p.IsEnd(); p.GoNext())
+	Polinom d;
+	Polinom::iterator i(p.begin());
+	Polinom::iterator j(this->begin());
+
+	for (; i != p.end(); ++i)
 	{
-		Monom tmp = p.getCurr();
-		res.AddMonom(tmp);
+		j = this->begin();
+		for (; j != this->end(); ++j)
+		{
+			double coefff = (*j).coeff * (*i).coeff;
+			int xx = (*i).x + (*j).x;
+			int yy = (*i).y + (*j).y;
+			int zz = (*i).z + (*j).z;
+
+			d.AddMonom({ coefff, xx, yy, zz });
+		}
 	}
-	return res;
+
+	while (pFirst != nullptr) {
+		DelFirst();
+	}
+
+	return d;
 }
 
+Polinom Polinom::operator-(double t)
+{
+	t *= (-1.0);
+	Monom a(t, 0, 0, 0);
+	AddMonom(a);
+	return *this;
+}
+
+Polinom Polinom::operator-(Monom m)
+{
+	m.coeff *= (-1);
+	AddMonom(m);
+	return *this;
+}
+
+Polinom Polinom::operator-(Polinom p)
+{
+	Polinom::iterator i(p.begin());
+
+	for (; i != p.end(); ++i)
+	{
+		(*i).coeff *= (-1);
+		AddMonom(*i);
+	}
+	return *this;
+}
+
+void Polinom::operator-=(double t)
+{
+	t *= (-1.0);
+	Monom a(t, 0, 0, 0);
+	AddMonom(a);
+}
+
+void Polinom::operator-=(Monom m)
+{
+	m.coeff *= (-1);
+	AddMonom(m);
+}
+
+void Polinom::operator-=(Polinom p)
+{
+	Polinom::iterator i(p.begin());
+
+	for (; i != p.end(); ++i)
+	{
+		(*i).coeff *= (-1);
+		AddMonom(*i);
+	}
+}
+
+void Polinom::SubConst(double t)
+{
+	t *= (-1.0);
+	Monom a(t, 0, 0, 0);
+	AddMonom(a);
+}
+
+void Polinom::SubMonom(Monom m)
+{
+	m.coeff *= (-1);
+	AddMonom(m);
+}
+
+void Polinom::SubPolinom(Polinom p)
+{
+	Polinom::iterator i(p.begin());
+
+	for (; i != p.end(); ++i)
+	{
+		(*i).coeff *= (-1);
+		AddMonom(*i);
+	}
+}
 

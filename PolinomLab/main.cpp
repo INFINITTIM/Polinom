@@ -10,6 +10,22 @@ using namespace std;
 
 int main()
 {
+    /*
+    Monom a(4.0, 2, 0, 4);
+    Monom b(-3.0, 1, 2, 5);
+    Monom ab[] = {a,b};
+    Polinom p(ab, 2);
+    cout << p << endl;
+    Polinom p2(p);
+    cout << p2 << endl;
+    Polinom p3;
+    p3 = p;
+    cout << p3 << endl;
+    Polinom p4;
+    p4 = p3 + a;
+    cout << p4 << endl;
+    */
+    
     Monom a(4.0, 2, 3, 4);
     Monom b(-3.0, 1, 2, 5);
     Monom v(-3.0, 5, 2, 5);
@@ -108,13 +124,29 @@ int main()
 
     cout << d1 << endl;
 
+    Polinom d4;
+
+    Polinom d5(d);
+
     d.MultPolinom(d1);
 
-    cout << d;
+    cout << d << endl;
 
     Polinom d2;
     
     d2 = d + f;
 
     cout << d2 << endl;
+
+    Polinom d3;
+
+    d3 = d2 + 4.9;
+
+    cout << d3 << endl;
+
+
+    cout << d5 << endl << d1 << endl;
+    d4 = d5 * d1;
+
+    cout << d4 << endl;
 }

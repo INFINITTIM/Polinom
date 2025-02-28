@@ -34,6 +34,7 @@ public:
 	void InsFirst(T element);
 	void InsLast(T element);
 	void InsCurr(T element);
+
 	void DelFirst();
 	void DelLast();
 	void DelCurr();
@@ -41,6 +42,7 @@ public:
 	void Reset();
 	bool IsEnd() const;
 	void GoNext();
+
 	T getCurr();
 
 	void Clear();
@@ -103,24 +105,82 @@ List<T>::~List()
 template <class T>
 List<T>& List<T>::operator=(const List<T>& p)
 {
-	if (this == &p)
+	if (this == &p) 
 		return *this;
-	else
+	if (size == p.size) 
 	{
-		
+		Node<T>* tmp = p.pFirst;
+		Node<T>* stmp = pFirst;
+		for (int i = 0; i < size; i++) 
+		{
+			stmp->val = tmp->val;
+			tmp = tmp->pNext;
+			stmp = stmp->pNext;
+		}
+		Reset();
 	}
+	else 
+	{
+		Clear();
+		Node<T>* stmp = p.pFirst;
+		if (stmp != nullptr)
+		{
+			pFirst = new Node<T>;
+			pFirst->val = stmp->val;
+			pFirst->pNext = nullptr;
+
+			stmp = stmp->pNext;
+
+			Node<T>* gtmp = pFirst;
+
+			while (stmp != nullptr)
+			{
+				Node<T>* newNode = new Node<T>;
+				newNode->val = stmp->val;
+				newNode->pNext = nullptr;
+
+				gtmp->pNext = newNode;
+
+				stmp = stmp->pNext;
+				gtmp = gtmp->pNext;
+			}
+			pLast = gtmp;
+			Reset();
+			size = p.size;
+		}
+		else
+		{
+			pFirst = nullptr;
+			pLast = nullptr;
+			pCurr = nullptr;
+			pPrev = nullptr;
+			size = 0;
+		}
+	}
+	return *this;
 }
 
 template <class T>
 bool List<T>::operator==(const List<T>& p) const
 {
-
+	if (size != p.size)
+		return false;
+	Node<T>* node = pFirst;
+	Node<T>* pnode = p.pFirst;
+	while (node != nullptr)
+	{
+		if (node->val != pnode->val)
+			return false;
+		node = node->pNext;
+		pnode = pnode->pNext;
+	}
+	return true;
 }
 
 template <class T>
 bool List<T>::operator!=(const List<T>& p) const
 {
-
+	return (!(*this == p));
 }
 
 template <class T>

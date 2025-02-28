@@ -1,3 +1,4 @@
+#include "../PolinomLab/Node.h"
 #include "../PolinomLab/List.h"
 #include "../PolinomLab/Monom.h"
 #include "../PolinomLab/Monom.cpp"
@@ -60,6 +61,19 @@ TEST(Monom, correct_NE_monom) {
     Monom m2(6, 1, 9, 4);
 
     EXPECT_NE(m1, m2);
+}
+
+TEST(List, can_create_list)
+{
+    ASSERT_NO_THROW(List<int> m());
+}
+
+
+TEST(List, can_copy_list)
+{
+    List<int> m1;
+    m1.InsFirst(2);
+    ASSERT_NO_THROW(List<int> m(m1));
 }
 
 /*TEST(TQueue, can_create_queue_with_positive_size) {
