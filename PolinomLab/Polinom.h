@@ -18,6 +18,8 @@ public:
 	~Polinom();
 
 	Polinom& operator=(const Polinom& p);
+	bool operator==(const Polinom& p) const;
+	bool operator!=(const Polinom& p) const;
 
 	Polinom operator+(double t);
 	Polinom operator+(Monom m);

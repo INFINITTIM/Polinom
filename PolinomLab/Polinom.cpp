@@ -18,13 +18,34 @@ Polinom::Polinom(Monom* m, int size)
 	}
 }
 
+bool Polinom::operator==(const Polinom& p) const{
+	if (size != p.size)
+		return false;
+	Node<Monom>* node = pFirst;
+	Node<Monom>* pnode = p.pFirst;
+	while (node != nullptr)
+	{
+		if (node->val.coeff != pnode->val.coeff ||
+			node->val.x != pnode->val.x ||
+			node->val.y != pnode->val.y ||
+			node->val.z != pnode->val.z)
+			return false;
+		node = node->pNext;
+		pnode = pnode->pNext;
+	}
+	return true;
+}
+
+bool Polinom::operator!=(const Polinom& p) const {
+	return (!(*this == p));
+}
 Polinom::~Polinom()
 {
 }
 
 Polinom& Polinom::operator=(const Polinom& p)
 {
-	if (*this == p) 
+	if (*this == p)
 		return *this;
 	else
 	{
@@ -32,7 +53,6 @@ Polinom& Polinom::operator=(const Polinom& p)
 		return *this;
 	}
 }
-
 
 void Polinom::operator+=(double t)
 {

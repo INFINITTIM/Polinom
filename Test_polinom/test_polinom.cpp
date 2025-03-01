@@ -276,6 +276,24 @@ TEST(Polinom, correct_assignment_polinom)
     EXPECT_EQ(p, p1);
 }
 
+TEST(Polinom, compare_equal_polinom)
+{
+    Polinom p;
+    Polinom p1;
+    p.AddMonom({ 3,4,3,4 });
+    p1.AddMonom({ 3,4,3,4 });
+    ASSERT_TRUE(p == p1);
+}
+
+TEST(Polinom, compare_not_equal_polinom)
+{
+    Polinom p;
+    Polinom p1;
+    p.AddMonom({ 3,4,3,4 });
+    p1.AddMonom({ 5,4,3,4 });
+    ASSERT_TRUE(p != p1);
+}
+
 TEST(Polinom, can_add_const_with_function_to_not_empty_polinom)
 {
     Polinom p;
@@ -537,7 +555,7 @@ TEST(Polinom, can_add_monom_with_operator_plus_to_polinom_in_middle_and_equal_de
     Polinom p1;
     p1 = p + m;
     Monom mm[3] = { { 3, 5, 1, 0}, { 3457, 3, 1, 0 }, { 134, 1, 1, 0 } };
-    EXPECT_EQ(p, Polinom(mm, 3));
+    EXPECT_EQ(p1, Polinom(mm, 3));
 }
 
 
@@ -709,6 +727,338 @@ TEST(Polinom, can_add_empty_polinom_with_function_to_polinom)
     p.AddPolinom(p1);
     Monom mm[2] = { { 3, 5, 1, 0 }, { 134, 1, 1, 0 } };
     EXPECT_EQ(p, Polinom(mm, 2));
+}
+
+TEST(Polinom, can_add_polinom_with_function_to_polinom_full_left)
+{
+    Polinom p;
+    Polinom p1;
+    p.AddMonom({ 3, 5, 1, 0 });
+    p.AddMonom({ 3, 4, 1, 0 });
+    p1.AddMonom({ 3, 7, 1, 0 });
+    p1.AddMonom({ 3, 6, 1, 0 });
+    p.AddPolinom(p1);
+    Monom mm[4] = { { 3, 7, 1, 0 }, { 3, 6, 1, 0 }, { 3, 5, 1, 0 }, { 3, 4, 1, 0 } };
+    EXPECT_EQ(p, Polinom(mm, 4));
+}
+
+TEST(Polinom, can_add_polinom_with_function_to_polinom_full_right)
+{
+    Polinom p;
+    Polinom p1;
+    p.AddMonom({ 3, 5, 1, 0 });
+    p.AddMonom({ 3, 4, 1, 0 });
+    p1.AddMonom({ 3, 3, 1, 0 });
+    p1.AddMonom({ 3, 2, 1, 0 });
+    p.AddPolinom(p1);
+    Monom mm[4] = { { 3, 5, 1, 0 }, { 3, 4, 1, 0 }, { 3, 3, 1, 0 }, { 3, 2, 1, 0 } };
+    EXPECT_EQ(p, Polinom(mm, 4));
+}
+
+TEST(Polinom, can_add_polinom_with_function_to_polinom_more_position_1)
+{
+    Polinom p;
+    Polinom p1;
+    p.AddMonom({ 3, 5, 1, 0 });
+    p.AddMonom({ 3, 4, 1, 0 });
+    p1.AddMonom({ 3, 7, 1, 0 });
+    p1.AddMonom({ 3, 2, 1, 0 });
+    p.AddPolinom(p1);
+    Monom mm[4] = { { 3, 7, 1, 0 }, { 3, 5, 1, 0 }, { 3, 4, 1, 0 }, { 3, 2, 1, 0 } };
+    EXPECT_EQ(p, Polinom(mm, 4));
+}
+
+TEST(Polinom, can_add_polinom_with_function_to_polinom_more_position_2)
+{
+    Polinom p;
+    Polinom p1;
+    p.AddMonom({ 3, 9, 1, 0 });
+    p.AddMonom({ 3, 2, 1, 0 });
+    p1.AddMonom({ 3, 4, 1, 0 });
+    p1.AddMonom({ 3, 1, 1, 0 });
+    p.AddPolinom(p1);
+    Monom mm[4] = { { 3, 9, 1, 0 }, { 3, 4, 1, 0 }, { 3, 2, 1, 0 }, { 3, 1, 1, 0 } };
+    EXPECT_EQ(p, Polinom(mm, 4));
+}
+
+TEST(Polinom, can_add_polinom_with_function_to_polinom_more_position_3)
+{
+    Polinom p;
+    Polinom p1;
+    p.AddMonom({ 3, 9, 1, 0 });
+    p.AddMonom({ 3, 2, 1, 0 });
+    p1.AddMonom({ 3, 4, 1, 0 });
+    p1.AddMonom({ 3, 2, 1, 0 });
+    p.AddPolinom(p1);
+    Monom mm[3] = { { 3, 9, 1, 0 }, { 3, 4, 1, 0 }, { 6, 2, 1, 0 } };
+    EXPECT_EQ(p, Polinom(mm, 3));
+}
+
+TEST(Polinom, can_add_polinom_with_function_to_polinom_more_position_4)
+{
+    Polinom p;
+    Polinom p1;
+    p.AddMonom({ 3, 9, 1, 0 });
+    p.AddMonom({ 3, 2, 1, 0 });
+    p1.AddMonom({ 3, 9, 1, 0 });
+    p1.AddMonom({ 3, 2, 1, 0 });
+    p.AddPolinom(p1);
+    Monom mm[2] = { { 6, 9, 1, 0 }, { 6, 2, 1, 0 } };
+    EXPECT_EQ(p, Polinom(mm, 2));
+}
+
+TEST(Polinom, can_add_polinom_with_function_to_polinom_more_position_5)
+{
+    Polinom p;
+    Polinom p1;
+    Polinom p_empty;
+    p.AddMonom({ 3, 9, 1, 0 });
+    p.AddMonom({ 3, 2, 1, 0 });
+    p1.AddMonom({ -3, 9, 1, 0 });
+    p1.AddMonom({ -3, 2, 1, 0 });
+    p.AddPolinom(p1);
+    Monom mm[10];
+    EXPECT_EQ(p, Polinom(mm, 0));
+    EXPECT_EQ(p, p_empty);
+}
+
+TEST(Polinom, can_add_polinom_with_operator_plus_to_empty_polinom)
+{
+    Polinom p;
+    p.AddMonom({ 3, 5, 1, 0 });
+    p.AddMonom({ 134, 1, 1, 0 });
+    Polinom p1;
+    Polinom p2;
+    p2 = p + p1;
+    Monom mm[2] = { { 3, 5, 1, 0 }, { 134, 1, 1, 0 } };
+    EXPECT_EQ(p2, Polinom(mm, 2));
+}
+
+TEST(Polinom, can_add_empty_polinom_with_operator_plus_to_polinom)
+{
+    Polinom p;
+    Polinom p1;
+    p1.AddMonom({ 3, 5, 1, 0 });
+    p1.AddMonom({ 134, 1, 1, 0 });
+    Polinom p2;
+    p2 = p + p1;
+    Monom mm[2] = { { 3, 5, 1, 0 }, { 134, 1, 1, 0 } };
+    EXPECT_EQ(p2, Polinom(mm, 2));
+}
+
+TEST(Polinom, can_add_polinom_with_operator_plus_to_polinom_full_left)
+{
+    Polinom p;
+    Polinom p1;
+    p.AddMonom({ 3, 5, 1, 0 });
+    p.AddMonom({ 3, 4, 1, 0 });
+    p1.AddMonom({ 3, 7, 1, 0 });
+    p1.AddMonom({ 3, 6, 1, 0 });
+    Polinom p2;
+    p2 = p + p1;
+    Monom mm[4] = { { 3, 7, 1, 0 }, { 3, 6, 1, 0 }, { 3, 5, 1, 0 }, { 3, 4, 1, 0 } };
+    EXPECT_EQ(p2, Polinom(mm, 4));
+}
+
+TEST(Polinom, can_add_polinom_with_operator_plus_to_polinom_full_right)
+{
+    Polinom p;
+    Polinom p1;
+    p.AddMonom({ 3, 5, 1, 0 });
+    p.AddMonom({ 3, 4, 1, 0 });
+    p1.AddMonom({ 3, 3, 1, 0 });
+    p1.AddMonom({ 3, 2, 1, 0 });
+    Polinom p2;
+    p2 = p + p1;
+    Monom mm[4] = { { 3, 5, 1, 0 }, { 3, 4, 1, 0 }, { 3, 3, 1, 0 }, { 3, 2, 1, 0 } };
+    EXPECT_EQ(p2, Polinom(mm, 4));
+}
+
+TEST(Polinom, can_add_polinom_with_operator_plus_to_polinom_more_position_1)
+{
+    Polinom p;
+    Polinom p1;
+    p.AddMonom({ 3, 5, 1, 0 });
+    p.AddMonom({ 3, 4, 1, 0 });
+    p1.AddMonom({ 3, 7, 1, 0 });
+    p1.AddMonom({ 3, 2, 1, 0 });
+    Polinom p2;
+    p2 = p + p1;
+    Monom mm[4] = { { 3, 7, 1, 0 }, { 3, 5, 1, 0 }, { 3, 4, 1, 0 }, { 3, 2, 1, 0 } };
+    EXPECT_EQ(p2, Polinom(mm, 4));
+}
+
+TEST(Polinom, can_add_polinom_with_operator_plus_to_polinom_more_position_2)
+{
+    Polinom p;
+    Polinom p1;
+    p.AddMonom({ 3, 9, 1, 0 });
+    p.AddMonom({ 3, 2, 1, 0 });
+    p1.AddMonom({ 3, 4, 1, 0 });
+    p1.AddMonom({ 3, 1, 1, 0 });
+    Polinom p2;
+    p2 = p + p1;
+    Monom mm[4] = { { 3, 9, 1, 0 }, { 3, 4, 1, 0 }, { 3, 2, 1, 0 }, { 3, 1, 1, 0 } };
+    EXPECT_EQ(p2, Polinom(mm, 4));
+}
+
+TEST(Polinom, can_add_polinom_with_operator_plus_to_polinom_more_position_3)
+{
+    Polinom p;
+    Polinom p1;
+    p.AddMonom({ 3, 9, 1, 0 });
+    p.AddMonom({ 3, 2, 1, 0 });
+    p1.AddMonom({ 3, 4, 1, 0 });
+    p1.AddMonom({ 3, 2, 1, 0 });
+    Polinom p2;
+    p2 = p + p1;
+    Monom mm[3] = { { 3, 9, 1, 0 }, { 3, 4, 1, 0 }, { 6, 2, 1, 0 } };
+    EXPECT_EQ(p2, Polinom(mm, 3));
+}
+
+TEST(Polinom, can_add_polinom_with_operator_plus_to_polinom_more_position_4)
+{
+    Polinom p;
+    Polinom p1;
+    p.AddMonom({ 3, 9, 1, 0 });
+    p.AddMonom({ 3, 2, 1, 0 });
+    p1.AddMonom({ 3, 9, 1, 0 });
+    p1.AddMonom({ 3, 2, 1, 0 });
+    Polinom p2;
+    p2 = p + p1;
+    Monom mm[2] = { { 6, 9, 1, 0 }, { 6, 2, 1, 0 } };
+    EXPECT_EQ(p2, Polinom(mm, 2));
+}
+
+TEST(Polinom, can_add_polinom_with_operator_plus_to_polinom_more_position_5)
+{
+    Polinom p;
+    Polinom p1;
+    Polinom p_empty;
+    p.AddMonom({ 3, 9, 1, 0 });
+    p.AddMonom({ 3, 2, 1, 0 });
+    p1.AddMonom({ -3, 9, 1, 0 });
+    p1.AddMonom({ -3, 2, 1, 0 });
+    Polinom p2;
+    p2 = p + p1;
+    Monom mm[10];
+    EXPECT_EQ(p2, Polinom(mm, 0));
+    EXPECT_EQ(p2, p_empty);
+}
+
+TEST(Polinom, can_add_polinom_with_operator_plus_equal_to_empty_polinom)
+{
+    Polinom p;
+    p.AddMonom({ 3, 5, 1, 0 });
+    p.AddMonom({ 134, 1, 1, 0 });
+    Polinom p1;
+    p += p1;
+    Monom mm[2] = { { 3, 5, 1, 0 }, { 134, 1, 1, 0 } };
+    EXPECT_EQ(p, Polinom(mm, 2));
+}
+
+TEST(Polinom, can_add_empty_polinom_with_operator_plus_equal_to_polinom)
+{
+    Polinom p;
+    Polinom p1;
+    p1.AddMonom({ 3, 5, 1, 0 });
+    p1.AddMonom({ 134, 1, 1, 0 });
+    p += p1;
+    Monom mm[2] = { { 3, 5, 1, 0 }, { 134, 1, 1, 0 } };
+    EXPECT_EQ(p, Polinom(mm, 2));
+}
+
+TEST(Polinom, can_add_polinom_with_operator_plus_equal_to_polinom_full_left)
+{
+    Polinom p;
+    Polinom p1;
+    p.AddMonom({ 3, 5, 1, 0 });
+    p.AddMonom({ 3, 4, 1, 0 });
+    p1.AddMonom({ 3, 7, 1, 0 });
+    p1.AddMonom({ 3, 6, 1, 0 });
+    p += p1;
+    Monom mm[4] = { { 3, 7, 1, 0 }, { 3, 6, 1, 0 }, { 3, 5, 1, 0 }, { 3, 4, 1, 0 } };
+    EXPECT_EQ(p, Polinom(mm, 4));
+}
+
+TEST(Polinom, can_add_polinom_with_operator_plus_equal_to_polinom_full_right)
+{
+    Polinom p;
+    Polinom p1;
+    p.AddMonom({ 3, 5, 1, 0 });
+    p.AddMonom({ 3, 4, 1, 0 });
+    p1.AddMonom({ 3, 3, 1, 0 });
+    p1.AddMonom({ 3, 2, 1, 0 });
+    p += p1;
+    Monom mm[4] = { { 3, 5, 1, 0 }, { 3, 4, 1, 0 }, { 3, 3, 1, 0 }, { 3, 2, 1, 0 } };
+    EXPECT_EQ(p, Polinom(mm, 4));
+}
+
+TEST(Polinom, can_add_polinom_with_operator_plus_equal_to_polinom_more_position_1)
+{
+    Polinom p;
+    Polinom p1;
+    p.AddMonom({ 3, 5, 1, 0 });
+    p.AddMonom({ 3, 4, 1, 0 });
+    p1.AddMonom({ 3, 7, 1, 0 });
+    p1.AddMonom({ 3, 2, 1, 0 });
+    p += p1;
+    Monom mm[4] = { { 3, 7, 1, 0 }, { 3, 5, 1, 0 }, { 3, 4, 1, 0 }, { 3, 2, 1, 0 } };
+    EXPECT_EQ(p, Polinom(mm, 4));
+}
+
+TEST(Polinom, can_add_polinom_with_operator_plus_equal_to_polinom_more_position_2)
+{
+    Polinom p;
+    Polinom p1;
+    p.AddMonom({ 3, 9, 1, 0 });
+    p.AddMonom({ 3, 2, 1, 0 });
+    p1.AddMonom({ 3, 4, 1, 0 });
+    p1.AddMonom({ 3, 1, 1, 0 });
+    p += p1;
+    Monom mm[4] = { { 3, 9, 1, 0 }, { 3, 4, 1, 0 }, { 3, 2, 1, 0 }, { 3, 1, 1, 0 } };
+    EXPECT_EQ(p, Polinom(mm, 4));
+}
+
+TEST(Polinom, can_add_polinom_with_operator_plus_equal_to_polinom_more_position_3)
+{
+    Polinom p;
+    Polinom p1;
+    p.AddMonom({ 3, 9, 1, 0 });
+    p.AddMonom({ 3, 2, 1, 0 });
+    p1.AddMonom({ 3, 4, 1, 0 });
+    p1.AddMonom({ 3, 2, 1, 0 });
+    p += p1;
+    Monom mm[3] = { { 3, 9, 1, 0 }, { 3, 4, 1, 0 }, { 6, 2, 1, 0 } };
+    EXPECT_EQ(p, Polinom(mm, 3));
+}
+
+TEST(Polinom, can_add_polinom_with_operator_plus_equal_to_polinom_more_position_4)
+{
+    Polinom p;
+    Polinom p1;
+    p.AddMonom({ 3, 9, 1, 0 });
+    p.AddMonom({ 3, 2, 1, 0 });
+    p1.AddMonom({ 3, 9, 1, 0 });
+    p1.AddMonom({ 3, 2, 1, 0 });
+    p += p1;
+    Monom mm[2] = { { 6, 9, 1, 0 }, { 6, 2, 1, 0 } };
+    EXPECT_EQ(p, Polinom(mm, 2));
+}
+
+TEST(Polinom, can_add_polinom_with_operator_plus_equal_to_polinom_more_position_5)
+{
+    Polinom p;
+    Polinom p1;
+    Polinom p_empty;
+    p.AddMonom({ 3, 9, 1, 0 });
+    p.AddMonom({ 3, 2, 1, 0 });
+    p1.AddMonom({ -3, 9, 1, 0 });
+    p1.AddMonom({ -3, 2, 1, 0 });
+    p += p1;
+    Monom mm[10];
+    EXPECT_EQ(p, Polinom(mm, 0));
+    EXPECT_EQ(p, p_empty);
 }
 
 /*TEST(TQueue, can_create_queue_with_positive_size) {
