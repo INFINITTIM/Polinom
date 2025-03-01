@@ -238,8 +238,478 @@ TEST(List, correct_size)
     ASSERT_TRUE(m1.Size() == 2);
 }
 
+TEST(Polinom, can_create_polinom)
+{
+    ASSERT_NO_THROW(Polinom p);
+}
+
+TEST(Polinom, can_create_custom_polinom)
+{
+    Monom a(4.0, 2, 0, 4);
+    Monom b(-3.0, 1, 2, 5);
+    Monom m[] = { a, b };
+    ASSERT_NO_THROW(Polinom p(m, 2));
+}
+
+TEST(Polinom, can_copy_polinom)
+{
+    Polinom p;
+    p.AddMonom({ 3,4,3,4 });
+    ASSERT_NO_THROW(Polinom p1(p));
+}
 
 
+TEST(Polinom, correct_copy_polinom)
+{
+    Polinom p;
+    p.AddMonom({ 3,4,3,4 });
+    Polinom p1(p);
+    EXPECT_EQ(p, p1);
+}
+
+TEST(Polinom, correct_assignment_polinom)
+{
+    Polinom p;
+    Polinom p1;
+    p.AddMonom({ 3,4,3,4 });
+    p1 = p;
+    EXPECT_EQ(p, p1);
+}
+
+TEST(Polinom, can_add_const_with_function_to_not_empty_polinom)
+{
+    Polinom p;
+    p.AddMonom({ 3, 2, 0, 0 });
+    p.AddConst(5);
+    Monom m[2] = { { 3, 2, 0, 0 }, { 5, 0, 0, 0 } };
+    EXPECT_EQ(p, Polinom(m, 2));
+}
+
+TEST(Polinom, can_add_const_with_function_to_empty_polinom)
+{
+    Polinom p;
+    p.AddConst(5);
+    Monom m[1] = { { 5, 0, 0, 0 } };
+    EXPECT_EQ(p, Polinom(m, 1)); 
+}
+
+TEST(Polinom, can_add_const_with_function_to_polinom_with_const)
+{
+    Polinom p;
+    p.AddMonom({ 3, 2, 0, 0 });
+    p.AddConst(9);
+    p.AddConst(5);
+    Monom m[2] = { { 3, 2, 0, 0 }, { 14, 0, 0, 0 } };
+    EXPECT_EQ(p, Polinom(m, 2));
+}
+
+TEST(Polinom, can_add_const_with_operator_plus_to_not_empty_polinom)
+{
+    Polinom p;
+    p.AddMonom({ 3, 2, 0, 0 });
+    Polinom p1;
+    p1 = p + 5;
+    Monom m[2] = { { 3, 2, 0, 0 }, { 5, 0, 0, 0 } };
+    EXPECT_EQ(p1, Polinom(m, 2));
+}
+
+TEST(Polinom, can_add_const_with_operator_plus_to_empty_polinom)
+{
+    Polinom p;
+    Polinom p1;
+    p1 = p + 5;
+    Monom m[1] = { { 5, 0, 0, 0 } };
+    EXPECT_EQ(p1, Polinom(m, 1));
+}
+
+TEST(Polinom, can_add_const_with_operator_plus_to_polinom_with_const)
+{
+    Polinom p;
+    p.AddMonom({ 3, 2, 0, 0 });
+    p.AddConst(9);
+    Polinom p1;
+    p1 = p + 5;
+    Monom m[2] = { { 3, 2, 0, 0 }, { 14, 0, 0, 0 } };
+    EXPECT_EQ(p1, Polinom(m, 2));
+}
+
+TEST(Polinom, can_add_const_with_operator_plus_equal_to_not_empty_polinom)
+{
+    Polinom p;
+    p.AddMonom({ 3, 2, 0, 0 });
+    p += 5;
+    Monom m[2] = { { 3, 2, 0, 0 }, { 5, 0, 0, 0 } };
+    EXPECT_EQ(p, Polinom(m, 2));
+}
+
+TEST(Polinom, can_add_const_with_operator_plus_equal_to_empty_polinom)
+{
+    Polinom p;
+    p += 5;
+    Monom m[1] = { { 5, 0, 0, 0 } };
+    EXPECT_EQ(p, Polinom(m, 1));
+}
+
+TEST(Polinom, can_add_const_with_operator_plus_equal_to_polinom_with_const)
+{
+    Polinom p;
+    p.AddMonom({ 3, 2, 0, 0 });
+    p.AddConst(9);
+    p += 5;
+    Monom m[2] = { { 3, 2, 0, 0 }, { 14, 0, 0, 0 } };
+    EXPECT_EQ(p, Polinom(m, 2));
+}
+
+TEST(Polinom, can_add_monom_with_function_to_empty_polinom)
+{
+    Polinom p;
+    p.AddMonom({ 3, 2, 1, 0 });
+    Monom m[1] = { { 3, 2, 1, 0 } };
+    EXPECT_EQ(p, Polinom(m, 1));
+}
+
+TEST(Polinom, can_add_monom_with_function_to_polinom_in_first)
+{
+    Polinom p;
+    p.AddMonom({ 3, 2, 1, 0 });
+    p.AddMonom({ 1, 3, 1, 0 });
+    Monom m[2] = { { 1, 3, 1, 0 }, { 3, 2, 1, 0 } };
+    EXPECT_EQ(p, Polinom(m, 2));
+}
+
+TEST(Polinom, can_add_monom_with_function_to_polinom_in_last)
+{
+    Polinom p;
+    p.AddMonom({ 3, 2, 1, 0 });
+    p.AddMonom({ 134, 1, 1, 0 });
+    Monom m[2] = { { 3, 2, 1, 0 }, { 134, 1, 1, 0 } };
+    EXPECT_EQ(p, Polinom(m, 2));
+}
+
+TEST(Polinom, can_add_monom_with_function_to_polinom_in_middle)
+{
+    Polinom p;
+    p.AddMonom({ 3, 5, 1, 0 });
+    p.AddMonom({ 134, 1, 1, 0 });
+    p.AddMonom({ 1, 3, 1, 0 });
+    Monom m[3] = { { 3, 5, 1, 0 }, { 1, 3, 1, 0 }, { 134, 1, 1, 0 } };
+    EXPECT_EQ(p, Polinom(m, 3));
+}
+
+TEST(Polinom, can_add_monom_with_function_to_polinom_in_first_and_equal_degree)
+{
+    Polinom p;
+    p.AddMonom({ 3, 2, 1, 0 });
+    p.AddMonom({ 1, 1, 1, 0 });
+    p.AddMonom({ 1, 2, 1, 0 });
+    Monom m[2] = { { 4, 2, 1, 0 }, { 1, 1, 1, 0 } };
+    EXPECT_EQ(p, Polinom(m, 2));
+}
+
+TEST(Polinom, can_add_monom_with_function_to_polinom_in_last_and_equal_degree)
+{
+    Polinom p;
+    p.AddMonom({ 3, 2, 1, 0 });
+    p.AddMonom({ 134, 1, 1, 0 });
+    p.AddMonom({ 134, 1, 1, 0 });
+    Monom m[2] = { { 3, 2, 1, 0 }, { 268, 1, 1, 0 } };
+    EXPECT_EQ(p, Polinom(m, 2));
+}
+
+TEST(Polinom, can_add_monom_with_function_to_polinom_in_middle_and_equal_degree)
+{
+    Polinom p;
+    p.AddMonom({ 3, 5, 1, 0 });
+    p.AddMonom({ 134, 1, 1, 0 });
+    p.AddMonom({ 1, 3, 1, 0 });
+    p.AddMonom({ 3456, 3, 1, 0 });
+    Monom m[3] = { { 3, 5, 1, 0 }, { 3457, 3, 1, 0 }, { 134, 1, 1, 0 } };
+    EXPECT_EQ(p, Polinom(m, 3));
+}
+
+
+TEST(Polinom, can_add_monom_with_function_to_polinom_in_first_and_equal_degree_and_del_node)
+{
+    Polinom p;
+    p.AddMonom({ 3, 2, 1, 0 });
+    p.AddMonom({ 1, 1, 1, 0 });
+    p.AddMonom({ -3, 2, 1, 0 });
+    Monom m[1] = { { 1, 1, 1, 0 } };
+    EXPECT_EQ(p, Polinom(m, 1));
+}
+
+TEST(Polinom, can_add_monom_with_function_to_polinom_in_last_and_equal_degree_and_del_node)
+{
+    Polinom p;
+    p.AddMonom({ 3, 2, 1, 0 });
+    p.AddMonom({ -134, 1, 1, 0 });
+    p.AddMonom({ 134, 1, 1, 0 });
+    Monom m[1] = { { 3, 2, 1, 0 } };
+    EXPECT_EQ(p, Polinom(m, 1));
+}
+
+TEST(Polinom, can_add_monom_with_function_to_polinom_in_midlle_and_equal_degree_and_del_node)
+{
+    Polinom p;
+    p.AddMonom({ 3, 5, 1, 0 });
+    p.AddMonom({ 134, 1, 1, 0 });
+    p.AddMonom({ 234567, 3, 1, 0 });
+    p.AddMonom({ -234567, 3, 1, 0 });
+    Monom m[2] = { { 3, 5, 1, 0 }, { 134, 1, 1, 0 } };
+    EXPECT_EQ(p, Polinom(m, 2));
+}
+
+TEST(Polinom, can_add_monom_with_operator_plus_to_empty_polinom)
+{
+    Polinom p;
+    Monom m(3, 2, 1, 0 );
+    Polinom p1;
+    p1 = p + m;
+    Monom mm[1] = { { 3, 2, 1, 0 } };
+    EXPECT_EQ(p1, Polinom(mm, 1));
+}
+
+TEST(Polinom, can_add_monom_with_operator_plus_to_polinom_in_first)
+{
+    Polinom p;
+    p.AddMonom({ 3, 2, 1, 0 });
+    Monom m(1, 3, 1, 0);
+    Polinom p1;
+    p1 = p + m;
+    Monom mm[2] = { { 1, 3, 1, 0 }, { 3, 2, 1, 0 } };
+    EXPECT_EQ(p1, Polinom(mm, 2));
+}
+
+TEST(Polinom, can_add_monom_with_operator_plus_to_polinom_in_last)
+{
+    Polinom p;
+    p.AddMonom({ 3, 2, 1, 0 });
+    Monom m( 134, 1, 1, 0 );
+    Polinom p1;
+    p1 = p + m;
+    Monom mm[2] = { { 3, 2, 1, 0 }, { 134, 1, 1, 0 } };
+    EXPECT_EQ(p1, Polinom(mm, 2));
+}
+
+TEST(Polinom, can_add_monom_with_operator_plus_to_polinom_in_middle)
+{
+    Polinom p;
+    p.AddMonom({ 3, 5, 1, 0 });
+    p.AddMonom({ 134, 1, 1, 0 });
+    Monom m(1, 3, 1, 0);
+    Polinom p1;
+    p1 = p + m;
+    Monom mm[3] = { { 3, 5, 1, 0 }, { 1, 3, 1, 0 }, { 134, 1, 1, 0 } };
+    EXPECT_EQ(p1, Polinom(mm, 3));
+}
+
+TEST(Polinom, can_add_monom_with_operator_plus_to_polinom_in_first_and_equal_degree)
+{
+    Polinom p;
+    p.AddMonom({ 3, 2, 1, 0 });
+    p.AddMonom({ 1, 1, 1, 0 });
+    Monom m(1, 2, 1, 0);
+    Polinom p1;
+    p1 = p + m;
+    Monom mm[2] = { { 4, 2, 1, 0 }, { 1, 1, 1, 0 } };
+    EXPECT_EQ(p1, Polinom(mm, 2));
+}
+
+TEST(Polinom, can_add_monom_with_operator_plus_to_polinom_in_last_and_equal_degree)
+{
+    Polinom p;
+    p.AddMonom({ 3, 2, 1, 0 });
+    p.AddMonom({ 134, 1, 1, 0 });
+    Monom m( 134, 1, 1, 0 );
+    Polinom p1;
+    p1 = p + m;
+    Monom mm[2] = { { 3, 2, 1, 0 }, { 268, 1, 1, 0 } };
+    EXPECT_EQ(p1, Polinom(mm, 2));
+}
+
+TEST(Polinom, can_add_monom_with_operator_plus_to_polinom_in_middle_and_equal_degree)
+{
+    Polinom p;
+    p.AddMonom({ 3, 5, 1, 0 });
+    p.AddMonom({ 134, 1, 1, 0 });
+    p.AddMonom({ 1, 3, 1, 0 });
+    Monom m( 3456, 3, 1, 0 );
+    Polinom p1;
+    p1 = p + m;
+    Monom mm[3] = { { 3, 5, 1, 0}, { 3457, 3, 1, 0 }, { 134, 1, 1, 0 } };
+    EXPECT_EQ(p, Polinom(mm, 3));
+}
+
+
+TEST(Polinom, can_add_monom_with_operator_plus_to_polinom_in_first_and_equal_degree_and_del_node)
+{
+    Polinom p;
+    p.AddMonom({ 3, 2, 1, 0 });
+    p.AddMonom({ 1, 1, 1, 0 });
+    Monom m( -3, 2, 1, 0 );
+    Polinom p1;
+    p1 = p + m;
+    Monom mm[1] = { { 1, 1, 1, 0 } };
+    EXPECT_EQ(p1, Polinom(mm, 1));
+}
+
+TEST(Polinom, can_add_monom_with_operator_plus_to_polinom_in_last_and_equal_degree_and_del_node)
+{
+    Polinom p;
+    p.AddMonom({ 3, 2, 1, 0 });
+    p.AddMonom({ -134, 1, 1, 0 });
+    Monom m( 134, 1, 1, 0 );
+    Polinom p1;
+    p1 = p + m;
+    Monom mm[1] = { { 3, 2, 1, 0 } };
+    EXPECT_EQ(p1, Polinom(mm, 1));
+}
+
+TEST(Polinom, can_add_monom_with_operator_plus_to_polinom_in_middle_and_equal_degree_and_del_node)
+{
+    Polinom p;
+    p.AddMonom({ 3, 5, 1, 0 });
+    p.AddMonom({ 134, 1, 1, 0 });
+    p.AddMonom({ 234567, 3, 1, 0 });
+    Monom m( -234567, 3, 1, 0 );
+    Polinom p1;
+    p1 = p + m;
+    Monom mm[2] = { { 3, 5, 1, 0 }, { 134, 1, 1, 0 } };
+    EXPECT_EQ(p1, Polinom(mm, 2));
+}
+
+////////////////////////////////
+
+TEST(Polinom, can_add_monom_with_operator_plus_equal_to_empty_polinom)
+{
+    Polinom p;
+    Monom m(3, 2, 1, 0);
+    p += m;
+    Monom mm[1] = { { 3, 2, 1, 0 } };
+    EXPECT_EQ(p, Polinom(mm, 1));
+}
+
+TEST(Polinom, can_add_monom_with_operator_plus_equal_to_polinom_in_first)
+{
+    Polinom p;
+    p.AddMonom({ 3, 2, 1, 0 });
+    Monom m(1, 3, 1, 0);
+    p += m;
+    Monom mm[2] = { { 1, 3, 1, 0 }, { 3, 2, 1, 0 } };
+    EXPECT_EQ(p, Polinom(mm, 2));
+}
+
+TEST(Polinom, can_add_monom_with_operator_plus_equal_to_polinom_in_last)
+{
+    Polinom p;
+    p.AddMonom({ 3, 2, 1, 0 });
+    Monom m(134, 1, 1, 0);
+    p += m;
+    Monom mm[2] = { { 3, 2, 1, 0 }, { 134, 1, 1, 0 } };
+    EXPECT_EQ(p, Polinom(mm, 2));
+}
+
+TEST(Polinom, can_add_monom_with_operator_plus_equal_to_polinom_in_middle)
+{
+    Polinom p;
+    p.AddMonom({ 3, 5, 1, 0 });
+    p.AddMonom({ 134, 1, 1, 0 });
+    Monom m(1, 3, 1, 0);
+    p += m;
+    Monom mm[3] = { { 3, 5, 1, 0 }, { 1, 3, 1, 0 }, { 134, 1, 1, 0 } };
+    EXPECT_EQ(p, Polinom(mm, 3));
+}
+
+TEST(Polinom, can_add_monom_with_operator_plus_equal_to_polinom_in_first_and_equal_degree)
+{
+    Polinom p;
+    p.AddMonom({ 3, 2, 1, 0 });
+    p.AddMonom({ 1, 1, 1, 0 });
+    Monom m(1, 2, 1, 0);
+    p += m;
+    Monom mm[2] = { { 4, 2, 1, 0 }, { 1, 1, 1, 0 } };
+    EXPECT_EQ(p, Polinom(mm, 2));
+}
+
+TEST(Polinom, can_add_monom_with_operator_plus_equal_to_polinom_in_last_and_equal_degree)
+{
+    Polinom p;
+    p.AddMonom({ 3, 2, 1, 0 });
+    p.AddMonom({ 134, 1, 1, 0 });
+    Monom m(134, 1, 1, 0);
+    p += m;
+    Monom mm[2] = { { 3, 2, 1, 0 }, { 268, 1, 1, 0 } };
+    EXPECT_EQ(p, Polinom(mm, 2));
+}
+
+TEST(Polinom, can_add_monom_with_operator_plus_equal_to_polinom_in_middle_and_equal_degree)
+{
+    Polinom p;
+    p.AddMonom({ 3, 5, 1, 0 });
+    p.AddMonom({ 134, 1, 1, 0 });
+    p.AddMonom({ 1, 3, 1, 0 });
+    Monom m(3456, 3, 1, 0);
+    p += m;
+    Monom mm[3] = { { 3, 5, 1, 0}, { 3457, 3, 1, 0 }, { 134, 1, 1, 0 } };
+    EXPECT_EQ(p, Polinom(mm, 3));
+}
+
+
+TEST(Polinom, can_add_monom_with_operator_plus_equal_to_polinom_in_first_and_equal_degree_and_del_node)
+{
+    Polinom p;
+    p.AddMonom({ 3, 2, 1, 0 });
+    p.AddMonom({ 1, 1, 1, 0 });
+    Monom m(-3, 2, 1, 0);
+    p += m;
+    Monom mm[1] = { { 1, 1, 1, 0 } };
+    EXPECT_EQ(p, Polinom(mm, 1));
+}
+
+TEST(Polinom, can_add_monom_with_operator_plus_equal_to_polinom_in_last_and_equal_degree_and_del_node)
+{
+    Polinom p;
+    p.AddMonom({ 3, 2, 1, 0 });
+    p.AddMonom({ -134, 1, 1, 0 });
+    Monom m(134, 1, 1, 0);
+    p += m;
+    Monom mm[1] = { { 3, 2, 1, 0 } };
+    EXPECT_EQ(p, Polinom(mm, 1));
+}
+
+TEST(Polinom, can_add_monom_with_operator_plus_equal_to_polinom_in_middle_and_equal_degree_and_del_node)
+{
+    Polinom p;
+    p.AddMonom({ 3, 5, 1, 0 });
+    p.AddMonom({ 134, 1, 1, 0 });
+    p.AddMonom({ 234567, 3, 1, 0 });
+    Monom m(-234567, 3, 1, 0);
+    p += m;
+    Monom mm[2] = { { 3, 5, 1, 0 }, { 134, 1, 1, 0 } };
+    EXPECT_EQ(p, Polinom(mm, 2));
+}
+
+TEST(Polinom, can_add_polinom_with_function_to_empty_polinom)
+{
+    Polinom p;
+    p.AddMonom({ 3, 5, 1, 0 });
+    p.AddMonom({ 134, 1, 1, 0 });
+    Polinom p1;
+    p.AddPolinom(p1);
+    Monom mm[2] = { { 3, 5, 1, 0 }, { 134, 1, 1, 0 } };
+    EXPECT_EQ(p, Polinom(mm, 2));
+}
+
+TEST(Polinom, can_add_empty_polinom_with_function_to_polinom)
+{
+    Polinom p;
+    Polinom p1;
+    p1.AddMonom({ 3, 5, 1, 0 });
+    p1.AddMonom({ 134, 1, 1, 0 });
+    p.AddPolinom(p1);
+    Monom mm[2] = { { 3, 5, 1, 0 }, { 134, 1, 1, 0 } };
+    EXPECT_EQ(p, Polinom(mm, 2));
+}
 
 /*TEST(TQueue, can_create_queue_with_positive_size) {
     ASSERT_NO_THROW(Monom m());

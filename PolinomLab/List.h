@@ -194,6 +194,8 @@ void List<T>::InsFirst(T element)
 		Reset();
 	}
 	else
+		if (pCurr == pFirst)
+			pPrev = newNode;
 		pFirst = newNode;
 	size++;
 }
@@ -212,6 +214,8 @@ void List<T>::InsLast(T element)
 	}
 	else
 	{
+		if (pPrev == pLast)
+			pCurr = newNode;
 		pLast->pNext = newNode;
 		pLast = newNode;
 	}
@@ -242,7 +246,7 @@ void List<T>::DelFirst()
 	if (pFirst == nullptr)
 		return;
 	Node<T>* tmp = pFirst;
-	if (pCurr = pFirst)
+	if (pCurr == pFirst)
 		pCurr = pFirst->pNext;
 	pFirst = pFirst->pNext;
 	delete tmp;
@@ -288,7 +292,19 @@ void List<T>::DelCurr()
 	{
 		Node<T>* tmp = pCurr;
 		pCurr = pCurr->pNext;
-		pPrev->pNext = pCurr;
+		Node<T>* prevNode = pFirst;
+		while (prevNode != nullptr && prevNode->pNext != tmp) {
+			prevNode = prevNode->pNext;
+		}
+
+		// Обновляем указатель pPrev
+		pPrev = prevNode;
+
+		// Удаляем текущий элемент
+		if (prevNode != nullptr) {
+			prevNode->pNext = pCurr; // Пропускаем удаляемый элемент
+		}
+		//pPrev->pNext = pCurr;
 		delete tmp;
 		size--;
 	}

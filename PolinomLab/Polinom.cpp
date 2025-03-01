@@ -14,7 +14,7 @@ Polinom::Polinom(Monom* m, int size)
 {
 	for (int i = 0; i < size; i++)
 	{
-		InsLast(m[i]);
+		AddMonom(m[i]);
 	}
 }
 
@@ -157,11 +157,16 @@ void Polinom::AddMonom(Monom m)
 
 void Polinom::operator+=(Polinom p)
 {
-	Polinom::iterator i(p.begin());
-
-	for (; i != p.end(); ++i)
+	if (p.size == 0)
+		return;
+	else
 	{
-		AddMonom(*i);
+		Polinom::iterator i(p.begin());
+
+		for (; i != p.end(); ++i)
+		{
+			AddMonom(*i);
+		}
 	}
 }
 
@@ -184,22 +189,32 @@ void Polinom::operator+=(Polinom p)
 
 Polinom Polinom::operator+(Polinom p)
 {
-	Polinom::iterator i(p.begin());
-
-	for (; i != p.end(); ++i)
+	if (p.size == 0)
+		return *this;
+	else
 	{
-		AddMonom(*i);
+		Polinom::iterator i(p.begin());
+
+		for (; i != p.end(); ++i)
+		{
+			AddMonom(*i);
+		}
+		return *this;
 	}
-	return *this;
 }
 
 void Polinom::AddPolinom(Polinom p)
 {
-	Polinom::iterator i(p.begin());
-
-	for (; i != p.end(); ++i)
+	if (p.size == 0)
+		return;
+	else
 	{
-		AddMonom(*i);
+		Polinom::iterator i(p.begin());
+
+		for (; i != p.end(); ++i)
+		{
+			AddMonom(*i);
+		}
 	}
 }
 
@@ -254,38 +269,59 @@ void Polinom::MultConst(double t)
 
 void Polinom::operator*=(Monom m)
 {
-	Polinom::iterator i(this->begin());
-	for (; i != this->end(); ++i)
+	if (m.coeff == 0.0)
 	{
-		(*i).coeff *= m.coeff;
-		(*i).x += m.x;
-		(*i).y += m.y;
-		(*i).z += m.z;
+		Clear();
+	}
+	else
+	{
+		Polinom::iterator i(this->begin());
+		for (; i != this->end(); ++i)
+		{
+			(*i).coeff *= m.coeff;
+			(*i).x += m.x;
+			(*i).y += m.y;
+			(*i).z += m.z;
+		}
 	}
 }
 
 Polinom Polinom::operator*(Monom m)
 {
-	Polinom::iterator i(this->begin());
-	for (; i != this->end(); ++i)
+	if (m.coeff == 0.0)
 	{
-		(*i).coeff *= m.coeff;
-		(*i).x += m.x;
-		(*i).y += m.y;
-		(*i).z += m.z;
+		Clear();
+	}
+	else
+	{
+		Polinom::iterator i(this->begin());
+		for (; i != this->end(); ++i)
+		{
+			(*i).coeff *= m.coeff;
+			(*i).x += m.x;
+			(*i).y += m.y;
+			(*i).z += m.z;
+		}
 	}
 	return *this;
 }
 
 void Polinom::MultMonom(Monom m)
 {
-	Polinom::iterator i(this->begin());
-	for (; i != this->end(); ++i)
+	if (m.coeff == 0.0)
 	{
-		(*i).coeff *= m.coeff;
-		(*i).x += m.x;
-		(*i).y += m.y;
-		(*i).z += m.z;
+		Clear();
+	}
+	else
+	{
+		Polinom::iterator i(this->begin());
+		for (; i != this->end(); ++i)
+		{
+			(*i).coeff *= m.coeff;
+			(*i).x += m.x;
+			(*i).y += m.y;
+			(*i).z += m.z;
+		}
 	}
 }
 
