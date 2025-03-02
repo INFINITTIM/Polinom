@@ -1061,6 +1061,259 @@ TEST(Polinom, can_add_polinom_with_operator_plus_equal_to_polinom_more_position_
     EXPECT_EQ(p, p_empty);
 }
 
+TEST(Polinom, can_mult_const_with_function_to_polinom)
+{
+    Polinom p;
+    p.AddMonom({ 3, 9, 1, 0 });
+    p.AddMonom({ 3, 2, 1, 0 });
+    p.MultConst(4);
+    Monom mm[2] = { { 12, 9, 1, 0 }, { 12, 2, 1, 0 } };
+    EXPECT_EQ(p, Polinom(mm, 2));
+}
+
+TEST(Polinom, can_mult_const_null_with_function_to_polinom)
+{
+    Polinom p;
+    Polinom p_empty;
+    p.AddMonom({ 3, 9, 1, 0 });
+    p.AddMonom({ 3, 2, 1, 0 });
+    p.MultConst(0);
+    Monom mm[10];
+    EXPECT_EQ(p, Polinom(mm, 0));
+    EXPECT_EQ(p, p_empty);
+}
+
+TEST(Polinom, can_mult_const_with_function_to_empty_polinom)
+{
+    Polinom p;
+    Polinom p_empty;
+    p.MultConst(5);
+    Monom mm[10];
+    EXPECT_EQ(p, Polinom(mm, 0));
+    EXPECT_EQ(p, p_empty);
+}
+
+TEST(Polinom, can_mult_const_with_operator_mult_to_polinom)
+{
+    Polinom p;
+    Polinom p1;
+    p.AddMonom({ 3, 9, 1, 0 });
+    p.AddMonom({ 3, 2, 1, 0 });
+    p1 = p * 4;
+    Monom mm[2] = { { 12, 9, 1, 0 }, { 12, 2, 1, 0 } };
+    EXPECT_EQ(p1, Polinom(mm, 2));
+}
+
+TEST(Polinom, can_mult_const_null_with_operator_mult_to_polinom)
+{
+    Polinom p;
+    Polinom p1;
+    Polinom p_empty;
+    p.AddMonom({ 3, 9, 1, 0 });
+    p.AddMonom({ 3, 2, 1, 0 });
+    p1 = p * 0;
+    Monom mm[10];
+    EXPECT_EQ(p1, Polinom(mm, 0));
+    EXPECT_EQ(p1, p_empty);
+}
+
+TEST(Polinom, can_mult_const_with_operator_mult_to_empty_polinom)
+{
+    Polinom p;
+    Polinom p1;
+    Polinom p_empty;
+    p1 = p * 5;
+    Monom mm[10];
+    EXPECT_EQ(p1, Polinom(mm, 0));
+    EXPECT_EQ(p1, p_empty);
+}
+
+TEST(Polinom, can_mult_const_with_operator_mult_equal_to_polinom)
+{
+    Polinom p;
+    p.AddMonom({ 3, 9, 1, 0 });
+    p.AddMonom({ 3, 2, 1, 0 });
+    p *= 4;
+    Monom mm[2] = { { 12, 9, 1, 0 }, { 12, 2, 1, 0 } };
+    EXPECT_EQ(p, Polinom(mm, 2));
+}
+
+TEST(Polinom, can_mult_const_null_with_operator_mult_equal_to_polinom)
+{
+    Polinom p;
+    Polinom p_empty;
+    p.AddMonom({ 3, 9, 1, 0 });
+    p.AddMonom({ 3, 2, 1, 0 });
+    p *= 0;
+    Monom mm[10];
+    EXPECT_EQ(p, Polinom(mm, 0));
+    EXPECT_EQ(p, p_empty);
+}
+
+TEST(Polinom, can_mult_const_with_operator_mult_equal_to_empty_polinom)
+{
+    Polinom p;
+    Polinom p_empty;
+    p *= 5;
+    Monom mm[10];
+    EXPECT_EQ(p, Polinom(mm, 0));
+    EXPECT_EQ(p, p_empty);
+}
+
+TEST(Polinom, can_mult_null_monom_with_function_to_polinom)
+{
+    Polinom p;
+    Polinom p_empty;
+    p.AddMonom({ 3, 9, 1, 0 });
+    p.AddMonom({ 3, 2, 1, 0 });
+    p.MultMonom({ 0, 0, 0, 0 });
+    Monom mm[10];
+    EXPECT_EQ(p, Polinom(mm, 0));
+    EXPECT_EQ(p, p_empty);
+}
+
+TEST(Polinom, can_mult_monom_with_function_to_polinom)
+{
+    Polinom p;
+    p.AddMonom({ 3, 9, 1, 0 });
+    p.AddMonom({ 3, 2, 1, 0 });
+    p.MultMonom({ 5, 4, 3, 2 });
+    Monom mm[2] = { { 15, 13, 4, 2}, { 15, 6, 4, 2} };
+    EXPECT_EQ(p, Polinom(mm, 2));
+}
+
+TEST(Polinom, can_mult_monom_with_function_to_empty_polinom)
+{
+    Polinom p;
+    Polinom p_empty;
+    p.MultMonom({ 5, 4, 3, 2 });
+    Monom mm[10];
+    EXPECT_EQ(p, Polinom(mm, 0));
+    EXPECT_EQ(p, p_empty);
+}
+
+TEST(Polinom, can_mult_null_monom_with_operator_mult_to_polinom)
+{
+    Polinom p;
+    Polinom p1;
+    Polinom p_empty;
+    p.AddMonom({ 3, 9, 1, 0 });
+    p.AddMonom({ 3, 2, 1, 0 });
+    Monom m(0, 0, 0, 0);
+    p1 = p * m;
+    Monom mm[10];
+    EXPECT_EQ(p1, Polinom(mm, 0));
+    EXPECT_EQ(p1, p_empty);
+}
+
+TEST(Polinom, can_mult_monom_with_operator_mult_to_polinom)
+{
+    Polinom p;
+    Polinom p1;
+    p.AddMonom({ 3, 9, 1, 0 });
+    p.AddMonom({ 3, 2, 1, 0 });
+    Monom m( 5, 4, 3, 2 );
+    p1 = p * m;
+    Monom mm[2] = { { 15, 13, 4, 2}, { 15, 6, 4, 2} };
+    EXPECT_EQ(p1, Polinom(mm, 2));
+}
+
+TEST(Polinom, can_mult_monom_with_operator_mult_to_empty_polinom)
+{
+    Polinom p;
+    Polinom p1;
+    Polinom p_empty;
+    Monom m(5, 4, 3, 2 );
+    p1 = p * m;
+    Monom mm[10];
+    EXPECT_EQ(p1, Polinom(mm, 0));
+    EXPECT_EQ(p1, p_empty);
+}
+
+TEST(Polinom, can_mult_null_monom_with_operator_mult_equal_to_polinom)
+{
+    Polinom p;
+    Polinom p_empty;
+    p.AddMonom({ 3, 9, 1, 0 });
+    p.AddMonom({ 3, 2, 1, 0 });
+    Monom m(0, 0, 0, 0);
+    p *= m;
+    Monom mm[10];
+    EXPECT_EQ(p, Polinom(mm, 0));
+    EXPECT_EQ(p, p_empty);
+}
+
+TEST(Polinom, can_mult_monom_with_operator_mult_equal_to_polinom)
+{
+    Polinom p;
+    p.AddMonom({ 3, 9, 1, 0 });
+    p.AddMonom({ 3, 2, 1, 0 });
+    Monom m(5, 4, 3, 2);
+    p *= m;
+    Monom mm[2] = { { 15, 13, 4, 2}, { 15, 6, 4, 2} };
+    EXPECT_EQ(p, Polinom(mm, 2));
+}
+
+TEST(Polinom, can_mult_monom_with_operator_mult_equal_to_empty_polinom)
+{
+    Polinom p;
+    Polinom p_empty;
+    Monom m(5, 4, 3, 2);
+    p *= m;
+    Monom mm[10];
+    EXPECT_EQ(p, Polinom(mm, 0));
+    EXPECT_EQ(p, p_empty);
+}
+
+TEST(Polinom, can_mult_polinom_with_function_to_polinom)
+{
+    Polinom p;
+    p.AddMonom({ 2,5,1,6 });
+    p.AddMonom({ 5,1,1,3 });
+    Monom mm[2] = { { 3, 2, 2, 4 }, { 2, 2, 2, 2 } };
+    Polinom p1(mm, 2);
+    p.MultPolinom(p1);
+    Monom mmm[4] = { { 6, 7, 3, 10 }, { 4, 7, 3, 8 }, { 15, 3, 3, 7 }, { 10, 3, 3, 5 } };
+    EXPECT_EQ(p, Polinom(mmm, 4));
+}
+
+TEST(Polinom, can_mult_empty_polinom_with_function_to_polinom)
+{
+    Polinom p;
+    Polinom p1;
+    Polinom p_empty;
+    p.AddMonom({ 2,5,1,6 });
+    p.AddMonom({ 5,1,1,3 });
+    p.MultPolinom(p1);
+    Monom mm[10];
+    EXPECT_EQ(p, Polinom(mm, 0));
+    EXPECT_EQ(p, p_empty);
+}
+
+TEST(Polinom, can_mult_polinom_with_function_to_empty_polinom)
+{
+    Polinom p;
+    Polinom p1;
+    Polinom p_empty;
+    p1.AddMonom({ 2,5,1,6 });
+    p1.AddMonom({ 5,1,1,3 });
+    p.MultPolinom(p1);
+    Monom mm[10];
+    EXPECT_EQ(p, Polinom(mm, 0));
+    EXPECT_EQ(p, p_empty);
+}
+
+TEST(Polinom, can_mult_empty_polinom_with_function_to_empty_polinom)
+{
+    Polinom p;
+    Polinom p1;
+    Polinom p_empty;
+    p.MultPolinom(p1);
+    Monom mm[10];
+    EXPECT_EQ(p, Polinom(mm, 0));
+    EXPECT_EQ(p, p_empty);
+}
+
 /*TEST(TQueue, can_create_queue_with_positive_size) {
     ASSERT_NO_THROW(Monom m());
 }

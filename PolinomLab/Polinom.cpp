@@ -21,6 +21,8 @@ Polinom::Polinom(Monom* m, int size)
 bool Polinom::operator==(const Polinom& p) const{
 	if (size != p.size)
 		return false;
+	if (size == 0 && p.size == 0)
+		return true;
 	Node<Monom>* node = pFirst;
 	Node<Monom>* pnode = p.pFirst;
 	while (node != nullptr)
@@ -240,6 +242,8 @@ void Polinom::AddPolinom(Polinom p)
 
 void Polinom::operator*=(double t)
 {
+	if (size == 0)
+		return;
 	if (t == 0.0)
 	{
 		Clear();
@@ -256,6 +260,8 @@ void Polinom::operator*=(double t)
 
 Polinom Polinom::operator*(double t)
 {
+	if (size == 0)
+		return *this;
 	if (t == 0.0)
 	{
 		Clear();
@@ -273,6 +279,8 @@ Polinom Polinom::operator*(double t)
 
 void Polinom::MultConst(double t)
 {
+	if (size == 0)
+		return;
 	if (t == 0.0)
 	{
 		Clear();
@@ -289,6 +297,8 @@ void Polinom::MultConst(double t)
 
 void Polinom::operator*=(Monom m)
 {
+	if (size == 0)
+		return;
 	if (m.coeff == 0.0)
 	{
 		Clear();
@@ -308,6 +318,8 @@ void Polinom::operator*=(Monom m)
 
 Polinom Polinom::operator*(Monom m)
 {
+	if (size == 0)
+		return *this;
 	if (m.coeff == 0.0)
 	{
 		Clear();
@@ -328,6 +340,8 @@ Polinom Polinom::operator*(Monom m)
 
 void Polinom::MultMonom(Monom m)
 {
+	if (size == 0)
+		return;
 	if (m.coeff == 0.0)
 	{
 		Clear();
@@ -347,6 +361,29 @@ void Polinom::MultMonom(Monom m)
 
 void Polinom::MultPolinom(Polinom p)
 {
+	if (size == 0)
+		return;
+	if (p.size == 0)
+	{
+		Clear();
+		return;
+	}
+	Polinom res;
+	for (p.Reset(); !p.IsEnd(); p.GoNext())
+	{
+		Polinom tmp(*this);
+		Monom m = p.getCurr();
+		Polinom pp = tmp * m;
+		res += pp;
+	}
+	Clear();
+	*this += res;
+}
+
+void Polinom::operator*=(Polinom p)
+{
+	if (size == 0 || p.size == 0)
+		return;
 	Polinom d;
 	Polinom::iterator i(p.begin());
 	Polinom::iterator j(this->begin());
@@ -379,29 +416,16 @@ void Polinom::MultPolinom(Polinom p)
 
 Polinom Polinom::operator*(Polinom p)
 {
-	Polinom d;
-	Polinom::iterator i(p.begin());
-	Polinom::iterator j(this->begin());
-
-	for (; i != p.end(); ++i)
+	if (size == 0 || p.size == 0)
+		return *this;
+	Polinom res;
+	Polinom tmp(*this);
+	for (p.Reset(); !p.IsEnd(); p.GoNext())
 	{
-		j = this->begin();
-		for (; j != this->end(); ++j)
-		{
-			double coefff = (*j).coeff * (*i).coeff;
-			int xx = (*i).x + (*j).x;
-			int yy = (*i).y + (*j).y;
-			int zz = (*i).z + (*j).z;
-
-			d.AddMonom({ coefff, xx, yy, zz });
-		}
+		Monom m = p.getCurr();
+		res += tmp * m;
 	}
-
-	while (pFirst != nullptr) {
-		DelFirst();
-	}
-
-	return d;
+	return res;
 }
 
 Polinom Polinom::operator-(double t)

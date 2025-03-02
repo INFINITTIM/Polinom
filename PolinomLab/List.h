@@ -352,6 +352,7 @@ void List<T>::Clear()
 		pFirst = pFirst->pNext;
 		delete tmp;
 	}
+	size = 0;
 }
 
 template<class T>
