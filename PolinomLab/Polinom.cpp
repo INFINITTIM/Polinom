@@ -211,17 +211,18 @@ void Polinom::operator+=(Polinom p)
 
 Polinom Polinom::operator+(Polinom p)
 {
+	Polinom res(*this);
 	if (p.size == 0)
-		return *this;
+		return res;
 	else
 	{
 		Polinom::iterator i(p.begin());
 
 		for (; i != p.end(); ++i)
 		{
-			AddMonom(*i);
+			res.AddMonom(*i);
 		}
-		return *this;
+		return res;
 	}
 }
 
@@ -260,21 +261,22 @@ void Polinom::operator*=(double t)
 
 Polinom Polinom::operator*(double t)
 {
+	Polinom res(*this);
 	if (size == 0)
-		return *this;
+		return res;
 	if (t == 0.0)
 	{
-		Clear();
+		res.Clear();
 	}
 	else
 	{
-		Polinom::iterator i(this->begin());
-		for (; i != this->end(); ++i)
+		Polinom::iterator i(res.begin());
+		for (; i != res.end(); ++i)
 		{
 			(*i).coeff *= t;
 		}
 	}
-	return *this;
+	return res;
 }
 
 void Polinom::MultConst(double t)
@@ -318,16 +320,17 @@ void Polinom::operator*=(Monom m)
 
 Polinom Polinom::operator*(Monom m)
 {
+	Polinom res(*this);
 	if (size == 0)
-		return *this;
+		return res;
 	if (m.coeff == 0.0)
 	{
-		Clear();
+		res.Clear();
 	}
 	else
 	{
-		Polinom::iterator i(this->begin());
-		for (; i != this->end(); ++i)
+		Polinom::iterator i(res.begin());
+		for (; i != res.end(); ++i)
 		{
 			(*i).coeff *= m.coeff;
 			(*i).x += m.x;
@@ -335,7 +338,7 @@ Polinom Polinom::operator*(Monom m)
 			(*i).z += m.z;
 		}
 	}
-	return *this;
+	return res;
 }
 
 void Polinom::MultMonom(Monom m)
@@ -382,77 +385,77 @@ void Polinom::MultPolinom(Polinom p)
 
 void Polinom::operator*=(Polinom p)
 {
-	if (size == 0 || p.size == 0)
+	if (size == 0)
 		return;
-	Polinom d;
-	Polinom::iterator i(p.begin());
-	Polinom::iterator j(this->begin());
-
-	for (; i != p.end(); ++i)
+	if (p.size == 0)
 	{
-		j = this->begin();
-		for (; j != this->end(); ++j)
-		{
-			double coefff = (*j).coeff * (*i).coeff;
-			int xx = (*i).x + (*j).x;
-			int yy = (*i).y + (*j).y;
-			int zz = (*i).z + (*j).z;
-
-			d.AddMonom({ coefff, xx, yy, zz });
-		}
+		Clear();
+		return;
 	}
-
-	while (pFirst != nullptr) {
-		DelFirst();
-	}
-
-	Polinom::iterator m(d.begin());
-
-	for (; m != d.end(); ++m)
+	Polinom res;
+	for (p.Reset(); !p.IsEnd(); p.GoNext())
 	{
-		this->AddMonom(*m);
+		Polinom tmp(*this);
+		Monom m = p.getCurr();
+		Polinom pp = tmp * m;
+		res += pp;
 	}
+	Clear();
+	*this += res;
 }
 
 Polinom Polinom::operator*(Polinom p)
 {
-	if (size == 0 || p.size == 0)
+	if (size == 0)
 		return *this;
+	if (p.size == 0)
+	{
+		Clear();
+		return *this;
+	}
 	Polinom res;
-	Polinom tmp(*this);
 	for (p.Reset(); !p.IsEnd(); p.GoNext())
 	{
+		Polinom tmp(*this);
 		Monom m = p.getCurr();
-		res += tmp * m;
+		Polinom pp = tmp * m;
+		res += pp;
 	}
+	Clear();
+	*this += res;
 	return res;
 }
 
 Polinom Polinom::operator-(double t)
 {
+	Polinom res(*this);
 	t *= (-1.0);
 	Monom a(t, 0, 0, 0);
-	AddMonom(a);
-	return *this;
+	res.AddMonom(a);
+	return res;
 }
 
 Polinom Polinom::operator-(Monom m)
 {
+	Polinom res(*this);
 	m.coeff *= (-1);
-	AddMonom(m);
-	return *this;
+	res.AddMonom(m);
+	return res;
 }
 
 Polinom Polinom::operator-(Polinom p)
 {
+	Polinom res(*this);
+	if (p.size == 0)
+		return res;
 	Polinom::iterator i(p.begin());
 
 	for (; i != p.end(); ++i)
 	{
 		(*i).coeff *= (-1);
-		AddMonom(*i);
+		res.AddMonom(*i);
 	}
-	return *this;
+	return res;
 }
 
 void Polinom::operator-=(double t)
@@ -470,6 +473,8 @@ void Polinom::operator-=(Monom m)
 
 void Polinom::operator-=(Polinom p)
 {
+	if (p.size == 0)
+		return;
 	Polinom::iterator i(p.begin());
 
 	for (; i != p.end(); ++i)
@@ -494,6 +499,8 @@ void Polinom::SubMonom(Monom m)
 
 void Polinom::SubPolinom(Polinom p)
 {
+	if (p.size == 0)
+		return;
 	Polinom::iterator i(p.begin());
 
 	for (; i != p.end(); ++i)
