@@ -296,15 +296,10 @@ void List<T>::DelCurr()
 		while (prevNode != nullptr && prevNode->pNext != tmp) {
 			prevNode = prevNode->pNext;
 		}
-
-		// Обновляем указатель pPrev
 		pPrev = prevNode;
-
-		// Удаляем текущий элемент
 		if (prevNode != nullptr) {
-			prevNode->pNext = pCurr; // Пропускаем удаляемый элемент
+			prevNode->pNext = pCurr; 
 		}
-		//pPrev->pNext = pCurr;
 		delete tmp;
 		size--;
 	}
