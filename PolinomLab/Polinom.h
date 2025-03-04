@@ -77,7 +77,7 @@ public:
 					out << *i;
 				}
 			}
-			return out;
 		}
+		return out;
 	}
 };

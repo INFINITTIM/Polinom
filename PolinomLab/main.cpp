@@ -149,4 +149,31 @@ int main()
     d4 = d5 * d1;
 
     cout << d4 << endl;
+
+    Monom aa(4.0, 2, 3, 4);
+    Monom bb(-3.0, 1, 2, 5);
+    Monom vv(-3.0, 5, 2, 5);
+    Monom gg(-3.0, 2, 2, 5);
+
+    Polinom pp;
+    pp.AddMonom(aa);
+    pp.AddMonom(bb);
+
+    Polinom pppp(pp);
+
+    Polinom ppp;
+    ppp.AddMonom(vv);
+    ppp.AddMonom(gg);
+
+    cout << pp << endl << ppp << endl;
+
+    pp.AddPolinom(ppp);
+
+    cout << pp << endl;
+
+    cout << pppp << endl;
+
+    Polinom pppppp;
+
+    cout << pppppp << endl;
 }

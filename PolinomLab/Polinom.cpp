@@ -179,65 +179,111 @@ void Polinom::AddMonom(Monom m)
 
 void Polinom::operator+=(Polinom p)
 {
-	if (p.size == 0)
-		return;
-	else
+	Reset();
+	p.Reset();
+	while (!IsEnd() && !p.IsEnd())
 	{
-		Polinom::iterator i(p.begin());
-
-		for (; i != p.end(); ++i)
+		if (pCurr->val > p.pCurr->val)
+			GoNext();
+		else
 		{
-			AddMonom(*i);
+			if (pCurr->val < p.pCurr->val)
+			{
+				InsCurr(p.getCurr());
+				p.GoNext();
+			}
+			else
+			{
+				if (pCurr->val == p.pCurr->val)
+				{
+					pCurr->val.coeff += p.pCurr->val.coeff;
+					if (pCurr->val.coeff == 0)
+						DelCurr();
+					else
+						GoNext();
+					p.GoNext();
+				}
+			}
 		}
 	}
+	while (!p.IsEnd())
+	{
+		InsLast(p.getCurr());
+		p.GoNext();
+	}
 }
-
-//написать более быстрый алгоритм сложения похожий на слияние двух упорядоченных массивов 
-// в сортировке слиянием двигая pCurr у обоих 
-// 1) p.pCurr->val = res.pCurr->val;
-// 2) случай когда нужно добавить перед звеном pCurr; у res pCurr не подвинется pCurr;
-// 3) случай когда у нижнего степень меньше то просто двигаем верхний pCurr то есть у res;
-
-// написать более эффективное добавление полинома
-
-// * задания
-// умножение на моном 
-// 
-//Polinom Polinom::AddPolinom2(Polinom p)
-//{
-//	Polinom res(*this);
-//	
-//}
 
 Polinom Polinom::operator+(Polinom p)
 {
 	Polinom res(*this);
-	if (p.size == 0)
-		return res;
-	else
+	res.Reset();
+	p.Reset();
+	while (!res.IsEnd() && !p.IsEnd())
 	{
-		Polinom::iterator i(p.begin());
-
-		for (; i != p.end(); ++i)
+		if (res.pCurr->val > p.pCurr->val)
+			res.GoNext();
+		else
 		{
-			res.AddMonom(*i);
+			if (res.pCurr->val < p.pCurr->val)
+			{
+				res.InsCurr(p.getCurr());
+				p.GoNext();
+			}
+			else
+			{
+				if (res.pCurr->val == p.pCurr->val)
+				{
+					res.pCurr->val.coeff += p.pCurr->val.coeff;
+					if (res.pCurr->val.coeff == 0)
+						res.DelCurr();
+					else
+						res.GoNext();
+					p.GoNext();
+				}
+			}
 		}
-		return res;
 	}
+	while (!p.IsEnd())
+	{
+		res.InsLast(p.getCurr());
+		p.GoNext();
+	}
+	return res;
 }
 
 void Polinom::AddPolinom(Polinom p)
 {
-	if (p.size == 0)
-		return;
-	else
+	Reset();
+	p.Reset();
+	while (!IsEnd() && !p.IsEnd())
 	{
-		Polinom::iterator i(p.begin());
-
-		for (; i != p.end(); ++i)
+		if (pCurr->val > p.pCurr->val)
+			GoNext();
+		else
 		{
-			AddMonom(*i);
+			if (pCurr->val < p.pCurr->val)
+			{
+				InsCurr(p.getCurr());
+				p.GoNext();
+			}
+			else
+			{
+				if (pCurr->val == p.pCurr->val)
+				{
+					pCurr->val.coeff += p.pCurr->val.coeff;
+					if (pCurr->val.coeff == 0)
+						DelCurr();
+					else
+						GoNext();
+					p.GoNext();
+				}
+			}
 		}
+	}
+	while (!p.IsEnd())
+	{
+		InsLast(p.getCurr());
+		p.GoNext();
 	}
 }
 
