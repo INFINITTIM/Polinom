@@ -6,8 +6,6 @@
 #include "List.h"
 #include "Monom.h"
 
-using namespace std;
-
 class Polinom : public List<Monom>
 {
 public:
@@ -57,7 +55,7 @@ public:
 	void MultMonom(Monom m);
 	void MultPolinom(Polinom p);
 
-	friend ostream& operator<<(ostream& out,Polinom& p)
+	friend std::ostream& operator<<(std::ostream& out,Polinom& p)
 	{
 		if (p.size == 0)
 			out << "";

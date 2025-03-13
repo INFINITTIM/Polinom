@@ -1,8 +1,7 @@
 #pragma once
 
 #include <iostream>
-
-using namespace std;
+#include <string>
 
 struct Monom
 {
@@ -19,7 +18,7 @@ struct Monom
 	Monom();
 	Monom(double _coeff, int _x, int _y, int _z);
 
-	friend ostream& operator<<(ostream& out, const Monom& m)
+	friend std::ostream& operator<<(std::ostream& out, const Monom& m)
 	{
 		if (m.coeff < 0)
 			out << "- " << m.coeff * (-1.0);
@@ -33,6 +32,5 @@ struct Monom
 			out << "z^" << m.z;
 		return out;
 	}
-
 };
 

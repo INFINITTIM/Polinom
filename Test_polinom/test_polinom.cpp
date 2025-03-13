@@ -1737,7 +1737,7 @@ TEST(Polinom, can_sub_polinom_with_operator_sub_to_empty_polinom_where_monom_del
     EXPECT_EQ(p2, Polinom(mm, 2));
 }
 
-TEST(Polinom, can_sub__empty_polinom_with_operator_sub_to_empty_polinom_where_monom_deleted)
+TEST(Polinom, can_sub_empty_polinom_with_operator_sub_to_empty_polinom_where_monom_deleted)
 {
     Polinom p;
     Polinom p1;
