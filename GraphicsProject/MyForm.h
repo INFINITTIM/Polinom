@@ -41,6 +41,7 @@ namespace CppWinForm1 {
 	private: System::Windows::Forms::TextBox^ textBox5;
 	private: System::Windows::Forms::ListBox^ listBox1;
 	private: System::Windows::Forms::Button^ button1;
+	private: System::Windows::Forms::Label^ label1;
 
 
 
@@ -65,6 +66,7 @@ namespace CppWinForm1 {
 			this->textBox5 = (gcnew System::Windows::Forms::TextBox());
 			this->listBox1 = (gcnew System::Windows::Forms::ListBox());
 			this->button1 = (gcnew System::Windows::Forms::Button());
+			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->SuspendLayout();
 			// 
 			// textBox2
@@ -124,11 +126,23 @@ namespace CppWinForm1 {
 			this->button1->UseVisualStyleBackColor = true;
 			this->button1->Click += gcnew System::EventHandler(this, &MyForm::button1_Click);
 			// 
+			// label1
+			// 
+			this->label1->AutoSize = true;
+			this->label1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 20, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label1->Location = System::Drawing::Point(12, 506);
+			this->label1->Name = L"label1";
+			this->label1->Size = System::Drawing::Size(109, 39);
+			this->label1->TabIndex = 9;
+			this->label1->Text = L"label1";
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(1333, 701);
+			this->Controls->Add(this->label1);
 			this->Controls->Add(this->button1);
 			this->Controls->Add(this->listBox1);
 			this->Controls->Add(this->textBox5);
@@ -151,6 +165,7 @@ private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e
 	Monom m(coeff, x, y, z);
 	Polinom p;
 	p += m;
+	
 }
 };
 }
