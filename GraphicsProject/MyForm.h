@@ -165,7 +165,7 @@ private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e
 	Monom m(coeff, x, y, z);
 	Polinom p;
 	p += m;
-	
+	9regr9egerjgj9erj9
 }
 };
 }
