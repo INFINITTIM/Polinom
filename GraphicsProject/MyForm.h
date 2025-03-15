@@ -133,9 +133,8 @@ namespace CppWinForm1 {
 				static_cast<System::Byte>(204)));
 			this->label1->Location = System::Drawing::Point(12, 506);
 			this->label1->Name = L"label1";
-			this->label1->Size = System::Drawing::Size(109, 39);
+			this->label1->Size = System::Drawing::Size(0, 39);
 			this->label1->TabIndex = 9;
-			this->label1->Text = L"label1";
 			// 
 			// MyForm
 			// 
@@ -158,13 +157,21 @@ namespace CppWinForm1 {
 #pragma endregion
 
 private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
-	double coeff = Convert::ToDouble(textBox2->Text);
+	/*double coeff = Convert::ToDouble(textBox2->Text);
 	int x = Convert::ToInt32(textBox3->Text);
 	int y = Convert::ToInt32(textBox4->Text);
 	int z = Convert::ToInt32(textBox5->Text);
 	Monom m(coeff, x, y, z);
 	Polinom p;
 	p += m;
+	*/
+	String^ monom = textBox2->Text + "x^" + textBox3->Text + "y^" + textBox4->Text + "z^" + textBox5->Text;
+	double coeff = Convert::ToDouble(textBox2->Text);
+	if (String::IsNullOrEmpty(label1->Text))
+		label1->Text = monom;
+	else
+	{
+	}
 }
 };
 }

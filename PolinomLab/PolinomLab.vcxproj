@@ -129,6 +129,7 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Monom.cpp" />
+    <ClCompile Include="PCalculator.cpp" />
     <ClCompile Include="Polinom.cpp" />
   </ItemGroup>
   <ItemGroup>
