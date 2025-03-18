@@ -460,6 +460,7 @@ Polinom Polinom::operator*(Polinom p)
 		return *this;
 	}
 	Polinom res;
+	Polinom res2(*this);
 	for (p.Reset(); !p.IsEnd(); p.GoNext())
 	{
 		Polinom tmp(*this);
@@ -467,8 +468,7 @@ Polinom Polinom::operator*(Polinom p)
 		Polinom pp = tmp * m;
 		res += pp;
 	}
-	Clear();
-	*this += res;
+	res2 += res;
 	return res;
 }
 
